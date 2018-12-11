@@ -8,7 +8,8 @@
     <h3>Cities: {{ cities.length }}</h3>
     <ul>
       <li v-for="city in cities" :key="city.id">
-        <span>{{ city.name }}: {{ getCardsLeftInCity(city) }} cards</span>
+        <span>{{ city.name }}: {{ getCardsLeftInCity(city) }} reward cards</span>
+        <span>{{ city.dice }} dice</span>
         <ul>
           <li v-for="reward in city.rewards" :key="reward.value">Value: {{ reward.value }} - {{ reward.count }} cards</li>
         </ul>

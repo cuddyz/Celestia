@@ -7,6 +7,7 @@ function createDefaultState() {
       order: 1,
       baseValue: 1,
       name: 'Pink City',
+      dice: 0,
       rewards: [
         {
           value: 1,
@@ -27,6 +28,7 @@ function createDefaultState() {
       order: 2,
       baseValue: 2,
       name: 'Yellow City',
+      dice: 2,
       rewards: [
         {
           value: 2,
@@ -47,6 +49,7 @@ function createDefaultState() {
       order: 3,
       baseValue: 4,
       name: 'Green City',
+      dice: 2,
       rewards: [
         {
           value: 4,
@@ -67,6 +70,7 @@ function createDefaultState() {
       order: 4,
       baseValue: 6,
       name: 'Tan City',
+      dice: 2,
       rewards: [
         {
           value: 6,
@@ -87,6 +91,7 @@ function createDefaultState() {
       order: 5,
       baseValue: 9,
       name: 'Purple City',
+      dice: 3,
       rewards: [
         {
           value: 9,
@@ -103,6 +108,7 @@ function createDefaultState() {
       order: 6,
       baseValue: 12,
       name: 'Orange City',
+      dice: 3,
       rewards: [
         {
           value: 12,
@@ -119,6 +125,7 @@ function createDefaultState() {
       order: 7,
       baseValue: 15,
       name: 'Brown City',
+      dice: 3,
       rewards: [
         {
           value: 15,
@@ -131,6 +138,7 @@ function createDefaultState() {
       order: 8,
       baseValue: 20,
       name: 'Aqua City',
+      dice: 4,
       rewards: [
         {
           value: 20,
@@ -143,6 +151,7 @@ function createDefaultState() {
       order: 9,
       baseValue: 25,
       name: 'Blue City',
+      dice: 4,
       rewards: [
         {
           value: 25,
