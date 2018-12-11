@@ -1,0 +1,29 @@
+
+h3 {
+  color: color(primary);
+  font-weight: 400;
+}
+a {
+  border: thin dotted transparent;
+  color: lighten(color(primary), 10%);
+  text-decoration: none;
+  &:hover {
+    color: blue;
+  }
+  &:hover,
+  &:active {
+    cursor: pointer;
+  }
+  &:focus {
+    outline: none;
+    border-color: gray(60);
+  }
+  &[target="_blank"] {
+    margin-right: 0.75rem;
+    &:hover {
+      &:after {
+        color: inherit;
+      }
+    }
+  }
+}

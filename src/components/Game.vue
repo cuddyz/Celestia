@@ -177,17 +177,4 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-
-  h3,
-  h5,
-  ul {
-    margin: 0.5rem;
-  }
-
-  ul {
-    padding-bottom: 0.5rem;
-    li{
-      padding-top: 0.5rem;
-    }
-  }
 </style>

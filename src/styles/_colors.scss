@@ -1,0 +1,71 @@
+
+$black: #000;
+$white: #fff;
+
+// grayscale
+$grayscale: (
+  00: #000,
+  10: #121314,
+  20: #212223, // nearBlack
+  30: #343536, // grayVeryDark
+  40: #4c4d4e, // grayDark
+  50: #757677, // grayMid
+  60: #a6a7a8, // grayLight
+  70: #d0d1d2, // grayVeryLight
+  80: #eaebec, // graySuperLight
+  90: #f5f6f7, // nearWhite
+  95: #fcfdfe, // nearWhite bg
+ 100: #fff
+);
+@function gray($shade) {
+  @if map-has-key($grayscale, $shade) {
+    @return map-get($grayscale, $shade);
+  }
+}
+@each $value, $gray in $grayscale { // grayscale classes for inline use
+  .gray-#{$value} {
+    color: $gray;
+  }
+  .bg-gray-#{$value} {
+    background-color: $gray;
+  }
+  .border-gray-#{$value} {
+    border-color: $gray;
+  }
+  :root {
+    --gray-#{$value}: #{$gray};
+  }
+}
+// colors
+$colors: (
+  primary: #004fa1,
+  success: rgba(30,160,30,0.85),
+  alert: rgba(160,30,30,0.85),
+  warning: rgba(215,115,15,0.85),
+  info: rgba(30,30,160,0.85),
+  partner: rgba(220,40,40,1),
+  customer: rgba(40,40,220,1),
+  yellow: rgba(217,187,95, 1),
+  orange: rgba(253,207,159, 1),
+  page: #f6f9fc
+);
+@function color($color) {
+  @if map-has-key($colors, $color) {
+    @return map-get($colors, $color);
+  }
+}
+@each $value, $color in $colors { // color classes for inline use
+  .color-#{$value} {
+    color: $color;
+  }
+  .bg-color-#{$value} {
+    background-color: $color;
+  }
+  .border-color-#{$value} {
+    border-color: $color;
+  }
+}
+
+:root {
+  --frameBorder: var(--gray-70);
+}

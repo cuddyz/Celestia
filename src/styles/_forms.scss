@@ -1,0 +1,83 @@
+
+:root {
+  --b-focus: #fafbfc;
+  --c-focus: #{color(primary)};
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  label,
+  input,
+  textarea {
+    padding: 0.5rem;
+    background-color: inherit;
+  }
+  label {
+    padding-bottom: 0;
+  }
+  .form-field {
+    margin-bottom: 0;
+  }
+}
+label,
+input,
+button,
+textarea {
+  transition: color 150ms,
+              border-color 150ms,
+              background-color 250ms;
+}
+label,
+.label {
+  order: -1;
+  font-size: 1em;
+  font-weight: 600;
+  color: gray(50);
+  user-select: none;
+}
+label,
+input,
+textarea {
+  display: block;
+}
+input,
+button,
+textarea {
+  border: 0;
+  border: solid gray(80);
+  border-width: 0 0 0.15rem 0;
+  background-color: $white;
+  &:focus {
+    outline: none;
+    border-color: color(primary);
+  }
+}
+input,
+select,
+textarea {
+  padding: 0.5rem 0;
+  &:focus { // highlight label when field has focus
+    ~ * {
+      color: var(--c-focus);
+    }
+  }
+  &[required] {
+    ~ label {
+      &:after {
+        color: color(alert);
+        content: "*";
+        margin-left: 0.25em;
+      }
+    }
+  }
+}
+textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+textarea,
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+}

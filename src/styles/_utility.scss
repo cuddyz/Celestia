@@ -1,0 +1,115 @@
+
+.scroll {
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: scrollbar;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.no-select { // text remains deselected when element is inadvertently double-clicked
+  user-select: none;
+  * {
+    user-select: inherit;
+  }
+}
+.pointer {
+  &:hover {
+    cursor: pointer;
+  }
+}
+.grayscale {
+  filter: grayscale(100%);
+}
+.icon-fix { // for FA icons that sit a little too high
+  position: relative;
+  top: 1px;
+}
+.hide {
+  display: none;
+}
+.jumbo {
+  font-size: 2.6em;
+  text-align: center;
+  i {
+    font-size: 2em;
+  }
+}
+.inline-block {
+  display: inline-block;
+}
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.sticky {
+  position: sticky;
+}
+
+// text adjusters
+.normal {
+  font-weight: 300;
+}
+.bold {
+  font-weight: 400;
+}
+.bolder {
+  font-weight: 600;
+}
+.smaller {
+  font-size: 0.85em;
+}
+.smallest {
+  font-size: 0.75em;
+}
+.tiny {
+  font-size: 0.65em;
+}
+.larger {
+  font-size: 1.25em;
+}
+.center {
+  text-align: center;
+  justify-content: center;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.italic {
+  font-style: italic;
+}
+.nowrap,
+.no-wrap {
+  white-space: nowrap;
+}
+.pre-line {
+  white-space: pre-line;
+}
+.overflow-hidden {
+  overflow: hidden;
+  width: 0;
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.underline {
+  border-bottom: thin solid;
+}
+.commas {
+  &:after {
+    content: ", ";
+  }
+  &:last-of-type {
+    &:after {
+      content: "";
+    }
+  }
+}
+.flip {
+  transform: rotate(180deg);
+}

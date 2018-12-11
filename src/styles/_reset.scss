@@ -1,0 +1,90 @@
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  background-repeat: no-repeat; // never repeat backgrounds
+}
+html {
+  cursor: default; // use defalt cursor across all browsers
+  box-sizing: border-box; // better box model
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%; // iOS fix
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+               'Helvetica Neue', sans-serif;
+}
+body {
+  margin: 0;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section { // for grandpa browsers
+  display: block;
+}
+h1, h2, h3, h4, h5, h6,
+p, dl, dt, dd, ul, li { // reset globally, style locally when needed
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+img, svg, video,
+audio, canvas, iframe { // standardize display & alignment for media-based elements
+  vertical-align: middle;
+  display: block;
+}
+button, input,
+optgroup, select, textarea { // don't change to system font for form elements
+  text-transform: none;
+  font-family: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  margin: 0;
+}
+a, area, button,
+input, label, select,
+summary, textarea, [tabindex] { // remove tap delay
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+textarea {
+  overflow: auto; // Edge fix
+  resize: vertical; // lock resize direction
+}
+button, select {
+  text-transform: none;
+}
+pre { // FF fix
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+abbr[title] { // standardize text decoration
+  text-decoration: underline dotted;
+}
+[aria-busy="true"] { // show busy elements a busy cursor on hover
+  cursor: progress;
+}
+[aria-disabled],
+[disabled] { // show disabled elements a disabled cursor on hover
+  cursor: disabled;
+}
+b, strong { // FF fix
+  font-weight: bolder;
+}
+small { // FF fix
+  font-size: 80%;
+}
+svg { // change fill to be text color
+  fill: currentColor;
+}
+sub, sup { // fix subscripts and superscripts in Safari
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
