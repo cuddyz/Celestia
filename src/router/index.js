@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
+import Game from '@/components/Game'
 
 Vue.use(Router)
 
@@ -9,8 +9,8 @@ let routeConfig = {
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home
+      name: 'Game',
+      component: Game
     }
   ]
 }
