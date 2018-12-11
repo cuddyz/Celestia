@@ -33,9 +33,12 @@
         <input v-model="newPlayer.color" name="color" placeholder="Enter Color..." />
         <button @click="addPlayer()">Add Player</button>
       </div>
-      <div>
-        <h3>Ship: <span v-if="ship.location.name">Location: {{ ship.location.name }} | Players on board: {{ ship.players.length }}</span><span v-else>Start the game!</span></h3>
-        <button @click="resetShip">Start Game</button>
+      <div v-if="game.captain">
+        <h3>Ship: Location: {{ game.ship.location.name }} | Players on board: {{ game.ship.players.length }}</h3>
+        <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
+      </div>
+      <div v-else>
+        <button @click="newRound">Start Game</button>
       </div>
     </section>
   </main>
@@ -50,7 +53,7 @@ export default {
     ...mapGetters('cards', {cards: 'list', totalCards: 'cardsLeft'}),
     ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft'}),
     ...mapGetters('players', {players: 'list'}),
-    ...mapGetters('ship', {ship: 'show'})
+    ...mapGetters('core', {game: 'show'})
   },
   data() {
     return {
@@ -62,7 +65,7 @@ export default {
   },
   methods: {
     ...mapActions('players', {createPlayer: 'create'}),
-    ...mapActions('ship', ['resetShip']),
+    ...mapActions('core', ['newRound']),
     getCardsLeftInCity(city) {
       return this.cityCardsLeft(city.id)
     },
