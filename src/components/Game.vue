@@ -8,10 +8,12 @@
     <h3>Cities: {{ cities.length }}</h3>
     <ul>
       <li v-for="city in cities" :key="city.id">
-        <span>{{ city.name }}: {{ getCardsLeftInCity(city) }} reward cards</span>
-        <span>{{ city.dice }} dice</span>
+        <p>{{ city.name }}</p>
+        <p>{{ getCardsLeftInCity(city) }} reward cards</p>
+        <p>{{ city.dice }} dice</p>
         <ul>
-          <li v-for="reward in city.rewards" :key="reward.value">Value: {{ reward.value }} - {{ reward.count }} cards</li>
+          <h5>Reward Cards</h5>
+          <li v-for="reward in city.rewards" :key="reward.value">{{ reward.count }} cards of value {{ reward.value }}</li>
         </ul>
       </li>
     </ul>
@@ -37,6 +39,7 @@ export default {
 
 <style lang="scss" scoped>
   h3,
+  h5,
   ul {
     margin: 0.5rem;
   }
