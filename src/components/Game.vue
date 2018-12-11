@@ -33,12 +33,25 @@
         <input v-model="newPlayer.color" name="color" placeholder="Enter Color..." />
         <button @click="addPlayer()">Add Player</button>
       </div>
-      <div v-if="game.captain">
-        <h4>Ship: Players on board: {{ game.ship.players.length }}</h4>
-        <p>Current City: {{ game.ship.city.name }} | Next City: <span v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span v-else>None</span></p>
-        <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
-        <h4>Passengers:</h4>
-        <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }})</p>
+      <div v-if="game.started">
+        <div>
+          <h4>Ship: Players on board: {{ game.ship.players.length }}</h4>
+          <p>Current City: {{ game.ship.city.name }} | Next City: <span v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span v-else>None</span></p>
+        </div>
+        <div>
+          <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
+          <h4>Passengers:</h4>
+          <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }})</p>
+        </div>
+        <div>
+          <div v-if="game.dice && game.dice.length > 0">
+            <h4>Dice Rolled:</h4>
+            <p v-for="(die, index) in game.dice" :key="index">{{ die }}</p>
+          </div>
+          <div v-else>
+            <button @click="rollDice">Roll Dice</button>
+          </div>
+        </div>
       </div>
       <div v-else>
         <button @click="reset">Start Game</button>
@@ -78,6 +91,7 @@ export default {
       },
       die: [],
       game: {
+        started: false,
         captain: '',
         dice: [],
         ship: {
@@ -98,8 +112,9 @@ export default {
     },
     reset() {
       this.game = {
+        started: true,
         captain: this.getNextCaptain(),
-        dice: [this.dice_faces.BLANK, this.dice_faces.BLANK, this.dice_faces.BLANK, this.dice_faces.BLANK],
+        dice: [],
         ship: {
           city: this.startingCity,
           nextCity: this.nextCity(this.startingCity.id),
@@ -119,6 +134,15 @@ export default {
           return this.players[0]
         }
       }
+    },
+    rollDice() {
+      const numDice = this.game.ship.nextCity.dice
+      let diceRolled = []
+      for (let i = 0; i < numDice; i++) {
+        let random = Math.floor(Math.random() * 6)
+        diceRolled[i] = this.die[random]
+      }
+      this.$set(this.game, 'dice', diceRolled)
     }
   },
   created() {
