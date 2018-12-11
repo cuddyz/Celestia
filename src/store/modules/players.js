@@ -17,7 +17,8 @@ const actions = {
       id: name,
       name: name,
       color: color,
-      score: 0
+      score: 0,
+      hand: []
     }
     commit('ADD', [{id: player.id, value: player}])
     return player
