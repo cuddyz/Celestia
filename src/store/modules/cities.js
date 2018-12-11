@@ -193,6 +193,17 @@ const getters = {
   },
   startingCity(state) {
     return Object.values(state).find(city => city.order === 1)
+  },
+  nextCity(state) {
+    return function (id) {
+      const currentCity = state[id]
+      const nextCityOrder = currentCity.order + 1
+      if (nextCityOrder > 9) {
+        return ''
+      }
+
+      return Object.values(state).find(city => city.order === nextCityOrder)
+    }
   }
 }
 

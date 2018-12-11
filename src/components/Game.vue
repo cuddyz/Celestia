@@ -34,7 +34,8 @@
         <button @click="addPlayer()">Add Player</button>
       </div>
       <div v-if="game.captain">
-        <h4>Ship: Current City: {{ game.ship.city.name }} | Players on board: {{ game.ship.players.length }}</h4>
+        <h4>Ship: Players on board: {{ game.ship.players.length }}</h4>
+        <p>Current City: {{ game.ship.city.name }} | Next City: <span v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span v-else>None</span></p>
         <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
         <h4>Passengers:</h4>
         <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }})</p>
@@ -53,7 +54,7 @@ export default {
   name: 'Game',
   computed: {
     ...mapGetters('cards', {cards: 'list', totalCards: 'cardsLeft'}),
-    ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft', startingCity: 'startingCity'}),
+    ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft', startingCity: 'startingCity', nextCity: 'nextCity'}),
     ...mapGetters('players', {players: 'list'}),
     notCaptain: function() {
       if (this.game.captain) {
@@ -101,6 +102,7 @@ export default {
         dice: [this.dice_faces.BLANK, this.dice_faces.BLANK, this.dice_faces.BLANK, this.dice_faces.BLANK],
         ship: {
           city: this.startingCity,
+          nextCity: this.nextCity(this.startingCity.id),
           players: this.players
         }
       }
