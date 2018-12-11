@@ -28,12 +28,37 @@ function createDefaultState() {
 const mutations = {
   ADD(state, payload) {
     Vue.set(state, payload.id, payload.value)
+  },
+  LOAD(state, payload) {
+    Object.assign(state, payload)
   }
 }
 
 const actions = {
-  update({ commit }, {id, value}) {
-    commit('ADD', {id, value})
+  updateCards({ commit, state }, deck) {
+    let newState = {
+      blue: {
+        count: deck.filter(card => card === state.blue.name).length,
+        name: 'Blue Compass'
+      },
+      yellow: {
+        count: deck.filter(card => card === state.yellow.name).length,
+        name: 'Yellow Lightning Arresters'
+      },
+      red: {
+        count: deck.filter(card => card === state.red.name).length,
+        name: 'Red Foghorns'
+      },
+      black: {
+        count: deck.filter(card => card === state.black.name).length,
+        name: 'Black Cannons'
+      },
+      wild: {
+        count: deck.filter(card => card === state.wild.name).length,
+        name: 'Wild'
+      }
+    }
+    commit('LOAD', newState)
   }
 }
 
@@ -45,6 +70,15 @@ const getters = {
   },
   list(state) {
     return Object.values(state)
+  },
+  getDeck(state) {
+    let deck = []
+    Object.values(state).forEach(function(card) {
+      for (let i = 0; i < card.count; i++) {
+        deck.push(card.name)
+      }
+    })
+    return deck
   },
   cardsLeft(state) {
     let count = 0

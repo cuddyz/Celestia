@@ -66,7 +66,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Game',
   computed: {
-    ...mapGetters('cards', {cards: 'list', totalCards: 'cardsLeft'}),
+    ...mapGetters('cards', {cards: 'list', deck: 'getDeck', totalCards: 'cardsLeft'}),
     ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft', startingCity: 'startingCity', nextCity: 'nextCity'}),
     ...mapGetters('players', {players: 'list'}),
     notCaptain: function() {
@@ -102,7 +102,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('players', {createPlayer: 'create'}),
+    ...mapActions('players', {createPlayer: 'create', updatePlayerHand: 'updatePlayerHand'}),
+    ...mapActions('cards', ['updateCards']),
     getCardsLeftInCity(city) {
       return this.cityCardsLeft(city.id)
     },
@@ -111,6 +112,12 @@ export default {
       this.newPlayer = {}
     },
     reset() {
+      if (!this.game.started) {
+        this.dealCards(8)
+      } else {
+        this.dealCards(1)
+      }
+
       this.game = {
         started: true,
         captain: this.getNextCaptain(),
@@ -139,10 +146,24 @@ export default {
       const numDice = this.game.ship.nextCity.dice
       let diceRolled = []
       for (let i = 0; i < numDice; i++) {
-        let random = Math.floor(Math.random() * 6)
+        const random = Math.floor(Math.random() * 6)
         diceRolled[i] = this.die[random]
       }
       this.$set(this.game, 'dice', diceRolled)
+    },
+    dealCards(num) {
+      this.players.forEach(p => {
+        let hand = [...p.hand]
+        let deck = [...this.deck]
+        console.log(deck)
+        for (let i = 0; i < num; i++) {
+          const random = Math.floor(Math.random() * deck.length)
+          hand.push(deck[random])
+          deck.splice(random, 1)
+        }
+        this.updatePlayerHand({player: p, hand: hand})
+        this.updateCards(deck)
+      })
     }
   },
   created() {

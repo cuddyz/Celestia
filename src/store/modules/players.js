@@ -23,8 +23,11 @@ const actions = {
     commit('ADD', {id: player.id, value: player})
     return player
   },
-  update({ commit }, {id, value}) {
-    commit('ADD', {id, value})
+  updatePlayerHand({ commit }, {player, hand}) {
+    let localPlayer = {...player}
+    localPlayer.hand = hand
+
+    commit('ADD', {id: localPlayer.id, value: localPlayer})
   }
 }
 
