@@ -155,7 +155,6 @@ export default {
       this.players.forEach(p => {
         let hand = [...p.hand]
         let deck = [...this.deck]
-        console.log(deck)
         for (let i = 0; i < num; i++) {
           const random = Math.floor(Math.random() * deck.length)
           hand.push(deck[random])
