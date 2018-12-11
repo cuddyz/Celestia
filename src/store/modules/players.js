@@ -7,7 +7,7 @@ function createDefaultState() {
 
 const mutations = {
   ADD(state, payload) {
-    payload.forEach(p => Vue.set(state, p.id, p.value))
+    Vue.set(state, payload.id, payload.value)
   }
 }
 
@@ -20,11 +20,11 @@ const actions = {
       score: 0,
       hand: []
     }
-    commit('ADD', [{id: player.id, value: player}])
+    commit('ADD', {id: player.id, value: player})
     return player
   },
   update({ commit }, {id, value}) {
-    commit('ADD', [{id, value}])
+    commit('ADD', {id, value})
   }
 }
 

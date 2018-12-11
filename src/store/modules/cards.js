@@ -27,13 +27,13 @@ function createDefaultState() {
 
 const mutations = {
   ADD(state, payload) {
-    payload.forEach(p => Vue.set(state, p.id, p.value))
+    Vue.set(state, payload.id, payload.value)
   }
 }
 
 const actions = {
   update({ commit }, {id, value}) {
-    commit('ADD', [{id, value}])
+    commit('ADD', {id, value})
   }
 }
 
