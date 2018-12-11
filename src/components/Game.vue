@@ -34,8 +34,10 @@
         <button @click="addPlayer()">Add Player</button>
       </div>
       <div v-if="game.captain">
-        <h3>Ship: Current City: {{ game.ship.city.name }} | Players on board: {{ game.ship.players.length }}</h3>
+        <h4>Ship: Current City: {{ game.ship.city.name }} | Players on board: {{ game.ship.players.length }}</h4>
         <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
+        <h4>Passengers:</h4>
+        <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }})</p>
       </div>
       <div v-else>
         <button @click="reset">Start Game</button>
@@ -52,7 +54,13 @@ export default {
   computed: {
     ...mapGetters('cards', {cards: 'list', totalCards: 'cardsLeft'}),
     ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft', startingCity: 'startingCity'}),
-    ...mapGetters('players', {players: 'list'})
+    ...mapGetters('players', {players: 'list'}),
+    notCaptain: function() {
+      if (this.game.captain) {
+        return this.players.filter(p => p.id !== this.game.captain.id)
+      }
+      return []
+    }
   },
   data() {
     return {
