@@ -1,39 +1,24 @@
 <template>
-  <main>
-    <section>
-      <h1>Welcome to Celestia</h1>
-      <div>
-        <h3>Total Playable Cards: {{ totalCards }}</h3>
-        <ul>
-          <li v-for="card in cards" :key="card.name">{{ card.name }}: {{ card.count }}</li>
+  <main class="m-2">
+    <h1>Celestia</h1>
+    <article v-if="!game.started" class="flex column align-center">
+      <h2>Players: {{ players.length }}</h2>
+      <section>
+        <ul class="flex column align-center m-1">
+          <li v-for="player in players" :key="player.id">{{ player.name }} ({{ player.color }})</li>
         </ul>
-      </div>
-      <div>
-        <h3>Cities: {{ cities.length }}</h3>
-        <ul>
-          <li v-for="city in cities" :key="city.id">
-            <p>{{ city.name }}</p>
-            <p>{{ getCardsLeftInCity(city) }} reward cards</p>
-            <p>{{ city.dice }} dice</p>
-            <ul>
-              <h5>Reward Cards</h5>
-              <li v-for="reward in city.rewards" :key="reward.value">{{ reward.count }} cards of value {{ reward.value }}</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </section>
-    <section>
-      <div>
-        <h3>Players: {{ players.length }}</h3>
-        <ul>
-          <li v-for="player in players" :key="player.id">{{ player.name }} ({{ player.color }}): {{ player.score }} points</li>
-        </ul>
-        <input v-model="newPlayer.name" name="name" placeholder="Enter Name..." />
-        <input v-model="newPlayer.color" name="color" placeholder="Enter Color..." />
-        <button @click="addPlayer()">Add Player</button>
-      </div>
-      <div v-if="game.started">
+        <div class="flex m-1">
+          <input type="text" v-model="newPlayer.name" name="name" placeholder="Enter Name..." class="mr-1" />
+          <input type="text" v-model="newPlayer.color" name="color" placeholder="Enter Color..." class="mr-1" />
+          <button @click="addPlayer()">Add Player</button>
+        </div>
+      </section>
+      <section>
+        <button @click="reset">Start Game</button>
+      </section>
+    </article>
+    <article v-else>
+      <section>
         <div>
           <h4>Ship: Players on board: {{ game.ship.players.length }}</h4>
           <p>Current City: {{ game.ship.city.name }} | Next City: <span v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span v-else>None</span></p>
@@ -52,11 +37,8 @@
             <button @click="rollDice">Roll Dice</button>
           </div>
         </div>
-      </div>
-      <div v-else>
-        <button @click="reset">Start Game</button>
-      </div>
-    </section>
+      </section>
+    </article>
   </main>
 </template>
 
@@ -171,10 +153,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-</style>

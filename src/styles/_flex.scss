@@ -53,6 +53,10 @@
 .split { // splits flexed elements into left/right (only-children shift to right side)
   margin-left: auto !important;
 }
+.margin-center {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 $flex: 9;
 @while $flex > 0 { // flex 1 - 9
