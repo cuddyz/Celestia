@@ -34,11 +34,11 @@
         <button @click="addPlayer()">Add Player</button>
       </div>
       <div v-if="game.captain">
-        <h3>Ship: Location: {{ game.ship.location.name }} | Players on board: {{ game.ship.players.length }}</h3>
+        <h3>Ship: Current City: {{ game.ship.city.name }} | Players on board: {{ game.ship.players.length }}</h3>
         <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
       </div>
       <div v-else>
-        <button @click="newRound">Start Game</button>
+        <button @click="reset">Start Game</button>
       </div>
     </section>
   </main>
@@ -51,28 +51,69 @@ export default {
   name: 'Game',
   computed: {
     ...mapGetters('cards', {cards: 'list', totalCards: 'cardsLeft'}),
-    ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft'}),
-    ...mapGetters('players', {players: 'list'}),
-    ...mapGetters('core', {game: 'show'})
+    ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft', startingCity: 'startingCity'}),
+    ...mapGetters('players', {players: 'list'})
   },
   data() {
     return {
       newPlayer: {
         name: '',
         color: ''
+      },
+      dice_faces: {
+        BLANK: 'blank',
+        BLUE: 'blue',
+        RED: 'red',
+        YELLOW: 'yellow',
+        BLACK: 'black'
+      },
+      die: [],
+      game: {
+        captain: '',
+        dice: [],
+        ship: {
+          location: '',
+          players: []
+        }
       }
     }
   },
   methods: {
     ...mapActions('players', {createPlayer: 'create'}),
-    ...mapActions('core', ['newRound']),
     getCardsLeftInCity(city) {
       return this.cityCardsLeft(city.id)
     },
     addPlayer() {
       this.createPlayer(this.newPlayer)
       this.newPlayer = {}
+    },
+    reset() {
+      this.game = {
+        captain: this.getNextCaptain(),
+        dice: [this.dice_faces.BLANK, this.dice_faces.BLANK, this.dice_faces.BLANK, this.dice_faces.BLANK],
+        ship: {
+          city: this.startingCity,
+          players: this.players
+        }
+      }
+    },
+    getNextCaptain() {
+      if (!this.game.captain) {
+        return this.players[0]
+      } else {
+        let currentIndex = this.players.findIndex(p => p.id === this.game.captain.id)
+        currentIndex++
+        if (currentIndex < this.players.length) {
+          return this.players[currentIndex]
+        } else {
+          return this.players[0]
+        }
+      }
     }
+  },
+  created() {
+    // Init die
+    this.die = [this.dice_faces.BLANK, this.dice_faces.BLUE, this.dice_faces.RED, this.dice_faces.YELLOW, this.dice_faces.BLACK, this.dice_faces.BLANK]
   }
 }
 </script>
