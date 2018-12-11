@@ -1,27 +1,25 @@
 import Vue from 'vue'
 
 function createDefaultState() {
-  return {
-  }
 }
 
 const mutations = {
   ADD(state, payload) {
     Vue.set(state, payload.id, payload.value)
+  },
+  LOAD(state, payload) {
+    Object.assign(state, payload)
   }
 }
 
 const actions = {
-  create({ commit, state }, {name, color}) {
-    const player = {
-      id: name,
-      name: name,
-      color: color,
-      score: 0,
-      hand: []
+  resetShip({ commit }) {
+    const ship = {
+      location: this.getters['cities/startingCity'],
+      players: this.getters['players/list']
     }
-    commit('ADD', {id: player.id, value: player})
-    return player
+    commit('LOAD', ship)
+    return ship
   },
   update({ commit }, {id, value}) {
     commit('ADD', {id, value})
@@ -30,16 +28,11 @@ const actions = {
 
 const getters = {
   show(state) {
-    return function (id) {
-      return state[id]
-    }
-  },
-  list(state) {
-    return Object.values(state)
+    return state
   }
 }
 
-export const playersModule = {
+export const shipModule = {
   namespaced: true,
   state: createDefaultState,
   mutations,

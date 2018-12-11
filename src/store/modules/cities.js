@@ -190,6 +190,9 @@ const getters = {
       city.rewards.forEach(function(card) { count += card.count })
       return count
     }
+  },
+  startingCity(state) {
+    return Object.values(state).find(city => city.order === 1)
   }
 }
 
