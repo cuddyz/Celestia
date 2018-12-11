@@ -1,8 +1,9 @@
 <template>
   <main class="m-2">
     <h1>Celestia</h1>
+    <h2 class="small" v-if="game.started">Deck: {{ totalCards }}</h2>
     <article v-if="!game.started" class="flex column align-center">
-      <h2>Players: {{ players.length }}</h2>
+      <h3>Players: {{ players.length }}</h3>
       <section>
         <ul class="flex column align-center m-1">
           <li v-for="player in players" :key="player.id">{{ player.name }} ({{ player.color }})</li>
@@ -17,21 +18,38 @@
         <button @click="reset">Start Game</button>
       </section>
     </article>
-    <article v-else>
-      <section>
-        <div>
-          <h4>Ship: Players on board: {{ game.ship.players.length }}</h4>
-          <p>Current City: {{ game.ship.city.name }} | Next City: <span v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span v-else>None</span></p>
+    <article v-else class="flex column align-center">
+      <section class="center">
+        <div class="mb-1">
+          <h2>Players still on board: {{ game.ship.players.length }}</h2>
+          <div class="flex center">
+            <div class="flex column">
+              <h4 class="pr-1 normal">Current City: <span class="bolder">{{ game.ship.city.name }}</span></h4>
+              <p class="smallest italic">{{ cityCardsLeft(game.ship.city.id)}} rewards left.</p>
+            </div>
+            <div class="flex-column">
+              <h4 class="normal">Next City: <span class="bolder" v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span class="bolder" v-else>None</span></h4>
+              <p class="smallest italic">{{ cityCardsLeft(game.ship.nextCity.id)}} rewards left.</p>
+            </div>
+          </div>
         </div>
         <div>
-          <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }}) | Hand {{ game.captain.hand }}</h4>
-          <h4>Passengers:</h4>
-          <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }}) | Hand: {{ player.hand }}</p>
+          <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
+          <div class="flex align-center">
+            <p>Hand: <span class="smallest italic">{{ game.captain.hand }}</span></p>
+          </div>
+          <h4 class="mt-1 mb-50">Passengers:</h4>
+          <div class="mb-1" v-for="player in notCaptain" :key="player.id">
+            <p>{{ player.name }} ({{ player.color }})</p>
+            <div class="flex align-center">
+              <p>Hand: <span class="smallest italic">{{ player.hand }}</span></p>
+            </div>
+          </div>
         </div>
         <div>
           <div v-if="game.dice && game.dice.length > 0">
             <h4>Dice Rolled:</h4>
-            <p v-for="(die, index) in game.dice" :key="index">{{ die }}</p>
+            <p class="capitalize" v-for="(die, index) in game.dice" :key="index">{{ die }}</p>
           </div>
           <div v-else>
             <button @click="rollDice">Roll Dice</button>
