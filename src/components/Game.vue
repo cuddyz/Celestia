@@ -34,7 +34,7 @@
         <button @click="addPlayer()">Add Player</button>
       </div>
       <div>
-        <h3>Ship: <span v-if="ship.location">Location: {{ ship.location.name }} | Players on board: {{ ship.players.length }}</span><span v-else>Start the game!</span></h3>
+        <h3>Ship: <span v-if="ship.location.name">Location: {{ ship.location.name }} | Players on board: {{ ship.players.length }}</span><span v-else>Start the game!</span></h3>
         <button @click="resetShip">Start Game</button>
       </div>
     </section>

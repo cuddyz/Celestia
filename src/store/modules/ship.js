@@ -1,6 +1,10 @@
 import Vue from 'vue'
 
 function createDefaultState() {
+  return {
+    location: '',
+    players: []
+  }
 }
 
 const mutations = {
