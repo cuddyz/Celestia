@@ -39,9 +39,9 @@
           <p>Current City: {{ game.ship.city.name }} | Next City: <span v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span v-else>None</span></p>
         </div>
         <div>
-          <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
+          <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }}) | Hand {{ game.captain.hand }}</h4>
           <h4>Passengers:</h4>
-          <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }})</p>
+          <p v-for="player in notCaptain" :key="player.id">{{ player.name }} ({{ player.color }}) | Hand: {{ player.hand }}</p>
         </div>
         <div>
           <div v-if="game.dice && game.dice.length > 0">
