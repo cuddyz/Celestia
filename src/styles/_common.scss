@@ -1,7 +1,7 @@
 
 a {
   border: thin dotted transparent;
-  color: lighten(color(primary), 10%);
+  color: lighten(color(blue), 10%);
   text-decoration: none;
   &:hover {
     color: blue;

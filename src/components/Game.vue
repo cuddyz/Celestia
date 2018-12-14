@@ -6,7 +6,7 @@
       <h3>Players: {{ players.length }}</h3>
       <section>
         <ul class="flex column align-center m-1">
-          <li v-for="player in players" :key="player.id">{{ player.name }} ({{ player.color }})</li>
+          <li v-for="player in players" :key="player.id">{{ player.name }} (<span :class="colorMap(player.color)">{{ player.color }}</span>)</li>
         </ul>
         <div class="flex m-1">
           <input type="text" v-model="newPlayer.name" name="name" placeholder="Enter Name..." class="mr-1" />
@@ -33,23 +33,20 @@
             </div>
           </div>
         </div>
-        <div>
-          <h4>Captain: {{ game.captain.name }} ({{ game.captain.color }})</h4>
-          <div class="flex align-center">
-            <p>Hand: <span class="smallest italic">{{ game.captain.hand }}</span></p>
-          </div>
-          <h4 class="mt-1 mb-50">Passengers:</h4>
-          <div class="mb-1" v-for="player in notCaptain" :key="player.id">
-            <p>{{ player.name }} ({{ player.color }})</p>
-            <div class="flex align-center">
-              <p>Hand: <span class="smallest italic">{{ player.hand }}</span></p>
+        <div class="text-left flex column align-center">
+          <h4 class="mt-1 mb-50 center boldest">Captain: {{ game.captain.name }} (<span :class="colorMap(game.captain.color)">{{ game.captain.color }}</span>)</h4>
+          <h4 class="mb-50 center">Passengers:</h4>
+          <div class="mb-1" v-for="player in players" :key="player.id">
+            <p class="boldest">{{ player.name }} (<span :class="colorMap(player.color)">{{ player.color }}</span>)</p>
+            <div>
+              <p v-for="card of player.hand" :key="card.name" class="smaller bolder"><span :class="colorMap(card.name)">{{ card.name }}:</span><span class="large pl-50">{{ card.count }}</span></p>
             </div>
           </div>
         </div>
-        <div>
+        <div class="mt-1">
           <div v-if="game.dice && game.dice.length > 0">
             <h4>Dice Rolled:</h4>
-            <p class="capitalize" v-for="(die, index) in game.dice" :key="index">{{ die }}</p>
+            <p class="capitalize" :class="colorMap(die)" v-for="(die, index) in game.dice" :key="index">{{ die }}</p>
           </div>
           <div v-else>
             <button @click="rollDice">Roll Dice</button>
@@ -164,6 +161,25 @@ export default {
         this.updatePlayerHand({player: p, hand: hand})
         this.updateCards(deck)
       })
+    },
+    colorMap: function(name) {
+      if (name.toLowerCase().includes('blue')) {
+        return 'color-blue'
+      } else if (name.toLowerCase().includes('yellow')) {
+        return 'color-yellow'
+      } else if (name.toLowerCase().includes('red')) {
+        return 'color-red'
+      } else if (name.toLowerCase().includes('black')) {
+        return 'color-black'
+      } else if (name.toLowerCase().includes('pink')) {
+        return 'color-pink'
+      } else if (name.toLowerCase().includes('green')) {
+        return 'color-green'
+      } else if (name.toLowerCase().includes('wild')) {
+        return 'color-wild'
+      } else if (name.toLowerCase().includes('blank')) {
+        return 'color-blank'
+      }
     }
   },
   created() {

@@ -14,9 +14,8 @@ button {
   color: gray(40);
   &:hover {
     cursor: pointer;
-    color: color(primary);
-    background-color: var(--b-focus);
-    border-color: color(primary);
+    color: color(blue);
+    border-color: color(blue);
   }
   &:active {
     color: gray(30);
@@ -31,8 +30,8 @@ button {
   &.color-alert {
     &:hover,
     &:active {
-      color: color(alert);
-      border-color: color(alert);
+      color: color(red);
+      border-color: color(red);
     }
   }
   &.disabled,

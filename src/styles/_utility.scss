@@ -56,6 +56,9 @@
 .bolder {
   font-weight: 600;
 }
+.boldest {
+  font-weight: 800;
+}
 .small {
   font-size: 0.95em;
 }
@@ -68,12 +71,18 @@
 .tiny {
   font-size: 0.65em;
 }
+.large {
+  font-size: 1.1em;
+}
 .larger {
   font-size: 1.25em;
 }
 .center {
   text-align: center;
   justify-content: center;
+}
+.text-left {
+  text-align: left;
 }
 .uppercase {
   text-transform: uppercase;

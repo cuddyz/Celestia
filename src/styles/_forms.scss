@@ -1,8 +1,3 @@
-
-:root {
-  --b-focus: #fafbfc;
-  --c-focus: #{color(primary)};
-}
 .form-field {
   display: flex;
   flex-direction: column;
@@ -50,22 +45,17 @@ textarea {
   background-color: $white;
   &:focus {
     outline: none;
-    border-color: color(primary);
+    border-color: color(blue);
   }
 }
 input,
 select,
 textarea {
   padding: 0.5rem 0;
-  &:focus { // highlight label when field has focus
-    ~ * {
-      color: var(--c-focus);
-    }
-  }
   &[required] {
     ~ label {
       &:after {
-        color: color(alert);
+        color: color(red);
         content: "*";
         margin-left: 0.25em;
       }

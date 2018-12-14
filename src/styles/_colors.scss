@@ -38,16 +38,12 @@ $grayscale: (
 }
 // colors
 $colors: (
-  primary: #004fa1,
-  success: rgba(30,160,30,0.85),
-  alert: rgba(160,30,30,0.85),
-  warning: rgba(215,115,15,0.85),
-  info: rgba(30,30,160,0.85),
-  partner: rgba(220,40,40,1),
-  customer: rgba(40,40,220,1),
-  yellow: rgba(217,187,95, 1),
-  orange: rgba(253,207,159, 1),
-  page: #f6f9fc
+  blue: #2196F3,
+  red: #D32F2F,
+  yellow: #FDD835,
+  green: #43A047,
+  pink: #F48FB1,
+  black: #212121
 );
 @function color($color) {
   @if map-has-key($colors, $color) {
@@ -64,6 +60,20 @@ $colors: (
   .border-color-#{$value} {
     border-color: $color;
   }
+}
+
+.color-wild {
+  background: color(blue);
+  background: linear-gradient(to right, color(red) , color(yellow), color(blue), color(pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: transparent;
+}
+
+.color-blank {
+  color: white;
+  -webkit-text-stroke: 0.5px black;
 }
 
 :root {
