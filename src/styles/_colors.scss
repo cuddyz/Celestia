@@ -39,10 +39,15 @@ $grayscale: (
 // colors
 $colors: (
   blue: #2196F3,
+  aqua: #4DD0E1,
   red: #D32F2F,
   yellow: #FDD835,
   green: #43A047,
   pink: #F48FB1,
+  tan: #B19863,
+  brown: #6D4C41,
+  purple: #9575CD,
+  orange: #FFA726,
   black: #212121
 );
 @function color($color) {

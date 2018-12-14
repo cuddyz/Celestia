@@ -24,11 +24,11 @@
           <h2>Players still on board: {{ game.ship.players.length }}</h2>
           <div class="flex center">
             <div class="flex column">
-              <h4 class="pr-1 normal">Current City: <span class="bolder">{{ game.ship.city.name }}</span></h4>
+              <h4 class="pr-1 normal">Current City: <span class="bolder" :class="colorMap(game.ship.city.name)">{{ game.ship.city.name }}</span></h4>
               <p class="smallest italic">{{ cityCardsLeft(game.ship.city.id)}} rewards left.</p>
             </div>
             <div class="flex-column">
-              <h4 class="normal">Next City: <span class="bolder" v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span class="bolder" v-else>None</span></h4>
+              <h4 class="normal">Next City: <span class="bolder" :class="colorMap(game.ship.nextCity.name)" v-if="game.ship.nextCity">{{ game.ship.nextCity.name }}</span><span class="bolder" v-else>None</span></h4>
               <p class="smallest italic">{{ cityCardsLeft(game.ship.nextCity.id)}} rewards left.</p>
             </div>
           </div>
@@ -165,16 +165,26 @@ export default {
     colorMap: function(name) {
       if (name.toLowerCase().includes('blue')) {
         return 'color-blue'
+      } else if (name.toLowerCase().includes('aqua')) {
+        return 'color-aqua'
       } else if (name.toLowerCase().includes('yellow')) {
         return 'color-yellow'
       } else if (name.toLowerCase().includes('red')) {
         return 'color-red'
+      } else if (name.toLowerCase().includes('orange')) {
+        return 'color-orange'
       } else if (name.toLowerCase().includes('black')) {
         return 'color-black'
       } else if (name.toLowerCase().includes('pink')) {
         return 'color-pink'
+      } else if (name.toLowerCase().includes('purple')) {
+        return 'color-purple'
       } else if (name.toLowerCase().includes('green')) {
         return 'color-green'
+      } else if (name.toLowerCase().includes('tan')) {
+        return 'color-tan'
+      } else if (name.toLowerCase().includes('brown')) {
+        return 'color-brown'
       } else if (name.toLowerCase().includes('wild')) {
         return 'color-wild'
       } else if (name.toLowerCase().includes('blank')) {
