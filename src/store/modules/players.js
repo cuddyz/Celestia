@@ -25,7 +25,28 @@ const actions = {
   },
   updatePlayerHand({ commit }, {player, hand}) {
     let localPlayer = {...player}
-    localPlayer.hand = hand
+    localPlayer.hand = {
+      blue: {
+        count: hand.filter(card => card === 'Blue Compass').length,
+        name: 'Blue Compass'
+      },
+      yellow: {
+        count: hand.filter(card => card === 'Yellow Lightning Arresters').length,
+        name: 'Yellow Lightning Arresters'
+      },
+      red: {
+        count: hand.filter(card => card === 'Red Foghorns').length,
+        name: 'Red Foghorns'
+      },
+      black: {
+        count: hand.filter(card => card === 'Black Cannons').length,
+        name: 'Black Cannons'
+      },
+      wild: {
+        count: hand.filter(card => card === 'Wild').length,
+        name: 'Wild'
+      }
+    }
 
     commit('ADD', {id: localPlayer.id, value: localPlayer})
   }

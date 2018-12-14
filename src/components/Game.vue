@@ -160,6 +160,7 @@ export default {
           hand.push(deck[random])
           deck.splice(random, 1)
         }
+
         this.updatePlayerHand({player: p, hand: hand})
         this.updateCards(deck)
       })
