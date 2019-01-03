@@ -21,7 +21,7 @@
     <article v-else class="flex column align-center">
       <section class="center">
         <div class="mb-1">
-          <h2>Players still on board: {{ game.ship.players.length }}</h2>
+          <h2>Players still on board: {{ game.ship.players.length + 1}}</h2>
           <div class="flex center">
             <div class="flex column">
               <h4 class="pr-1 normal">Current City: <span class="bolder" :class="colorMap(game.ship.city.name)">{{ game.ship.city.name }}</span></h4>
@@ -37,7 +37,7 @@
           <h4 class="mt-1 mb-50 center boldest">Captain: {{ game.captain.name }} (<span :class="colorMap(game.captain.color)">{{ game.captain.color }}</span>)</h4>
           <h4 class="mb-50 center">Passengers:</h4>
           <div class="mb-1" v-for="player in players" :key="player.id">
-            <p class="boldest">{{ player.name }} (<span :class="colorMap(player.color)">{{ player.color }}</span>)</p>
+            <p class="boldest">{{ player.name }} (<span :class="colorMap(player.color)">{{ player.color }}</span>): {{ player.score }} points</p>
             <div>
               <p v-for="card of player.hand" :key="card.name" class="smaller bolder"><span :class="colorMap(card.name)">{{ card.name }}:</span><span class="large pl-50">{{ card.count }}</span></p>
             </div>
@@ -50,6 +50,23 @@
           </div>
           <div v-else>
             <button @click="rollDice">Roll Dice</button>
+          </div>
+        </div>
+        <div class="mt-1" v-if="actingPlayer">
+          <h4 class="mt-1 mb-50 center boldest">Acting: {{ actingPlayer.name }} (<span :class="colorMap(actingPlayer.color)">{{ actingPlayer.color }}</span>)</h4>
+          <div>
+            <button @click="askNextPlayer()">Stay</button>
+            <button @click="jump()">Jump</button>
+          </div>
+        </div>
+        <div class="mt-1" v-if="result">
+          <div v-if="result === 'success'">
+            <h4 class="mt-1 mb-50 center boldest">You made it!</h4>
+            <button @click="nextCity()">Next City</button>
+          </div>
+          <div v-if="result === 'crash'">
+            <h4 class="mt-1 mb-50 center boldest">Crashed!</h4>
+            <button @click="reset()">Reset</button>
           </div>
         </div>
       </section>
@@ -65,13 +82,7 @@ export default {
   computed: {
     ...mapGetters('cards', {cards: 'list', deck: 'getDeck', totalCards: 'cardsLeft'}),
     ...mapGetters('cities', {cities: 'list', cityCardsLeft: 'cityCardsLeft', startingCity: 'startingCity', nextCity: 'nextCity'}),
-    ...mapGetters('players', {players: 'list'}),
-    notCaptain: function() {
-      if (this.game.captain) {
-        return this.players.filter(p => p.id !== this.game.captain.id)
-      }
-      return []
-    }
+    ...mapGetters('players', {players: 'list'})
   },
   data() {
     return {
@@ -87,6 +98,8 @@ export default {
         BLACK: 'black'
       },
       die: [],
+      actingPlayer: null,
+      result: '',
       game: {
         started: false,
         captain: '',
@@ -99,7 +112,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('players', {createPlayer: 'create', updatePlayerHand: 'updatePlayerHand'}),
+    ...mapActions('players', {createPlayer: 'create', updatePlayerHand: 'updatePlayerHand', givePlayerPoints: 'givePlayerPoints'}),
+    ...mapActions('cities', ['takeCard']),
     ...mapActions('cards', ['updateCards']),
     getCardsLeftInCity(city) {
       return this.cityCardsLeft(city.id)
@@ -109,20 +123,27 @@ export default {
       this.newPlayer = {}
     },
     reset() {
+      this.result = ''
       if (!this.game.started) {
-        this.dealCards(8)
+        if (this.players.length < 4) {
+          this.dealCards(8)
+        } else {
+          this.dealCards(6)
+        }
       } else {
         this.dealCards(1)
       }
 
+      const captain = this.getNextCaptain()
+
       this.game = {
         started: true,
-        captain: this.getNextCaptain(),
+        captain: captain,
         dice: [],
         ship: {
           city: this.startingCity,
           nextCity: this.nextCity(this.startingCity.id),
-          players: this.players
+          players: this.players.filter(p => p.id !== captain.id)
         }
       }
     },
@@ -147,18 +168,79 @@ export default {
         diceRolled[i] = this.die[random]
       }
       this.$set(this.game, 'dice', diceRolled)
+      this.askNextPlayer(0)
+    },
+    groupDice() {
+      let diceCount = {}
+      this.game.dice.forEach(die => {
+        if (die === 'blank') {
+          return
+        }
+        if (!diceCount[die]) {
+          diceCount[die] = 1
+        } else {
+          diceCount[die]++
+        }
+      })
+      return diceCount
+    },
+    askNextPlayer(index = -1) {
+      if (!this.actingPlayer) {
+        this.actingPlayer = this.game.ship.players[index]
+      } else {
+        if (index === -1) {
+          index = this.game.ship.players.findIndex(p => p.id === this.actingPlayer.id)
+        }
+        index += 1
+
+        if (index >= this.game.ship.players.length) {
+          this.resolve()
+        } else {
+          this.actingPlayer = this.game.ship.players[index]
+        }
+      }
+    },
+    async jump() {
+      const random = Math.floor(Math.random() * this.game.ship.city.rewards.length)
+      const rewardPoints = await this.takeCard({city: this.game.ship.city, index: random})
+      this.givePlayerPoints({player: this.actingPlayer, points: rewardPoints})
+
+      let index = this.game.ship.players.findIndex(p => p.id === this.actingPlayer.id)
+      this.game.ship.players.splice(index, 1)
+      this.askNextPlayer(index - 1)
+    },
+    resolve() {
+      this.actingPlayer = null
+      if (!this.checkCaptainHand()) {
+        this.result = 'crash'
+      } else {
+        // this.discardCards({player: this.game.captain, dice: this.game.dice})
+        this.result = 'success'
+      }
+    },
+    checkCaptainHand() {
+      const diceCount = this.groupDice()
+
+      for (let color in diceCount) {
+        if (this.game.captain.hand[color].count < diceCount[color]) {
+          // crash
+          return false
+        }
+      }
+      // success
+      return true
     },
     dealCards(num) {
       this.players.forEach(p => {
-        let hand = [...p.hand]
+        let cardsDrawn = []
         let deck = [...this.deck]
         for (let i = 0; i < num; i++) {
           const random = Math.floor(Math.random() * deck.length)
-          hand.push(deck[random])
+          cardsDrawn.push(deck[random])
           deck.splice(random, 1)
         }
 
-        this.updatePlayerHand({player: p, hand: hand})
+        this.updatePlayerHand({player: p, cards: cardsDrawn})
         this.updateCards(deck)
       })
     },

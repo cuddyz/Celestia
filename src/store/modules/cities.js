@@ -169,6 +169,16 @@ const mutations = {
 }
 
 const actions = {
+  takeCard({commit}, {city, index}) {
+    let localCity = {...city}
+    const rewardPoints = localCity.rewards[index].value
+    localCity.rewards[index].count--
+    if (localCity.rewards[index].count <= 0) {
+      localCity.rewards.splice(index, 1)
+    }
+    commit('ADD', {id: localCity.id, value: localCity})
+    return rewardPoints
+  },
   update({ commit }, {id, value}) {
     commit('ADD', {id, value})
   }
