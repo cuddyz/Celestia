@@ -49,6 +49,15 @@ const actions = {
     localPlayer.score += points
     commit('ADD', {id: localPlayer.id, value: localPlayer})
   },
+  discardPlayerCards({ commit }, {player, dice}) {
+    let localPlayer = {...player}
+
+    for (let color in dice) {
+      localPlayer.hand[color].count -= dice[color]
+    }
+
+    commit('ADD', {id: localPlayer.id, value: localPlayer})
+  },
   updatePlayerHand({ commit }, {player, cards}) {
     let localPlayer = {...player}
 

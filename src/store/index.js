@@ -12,5 +12,5 @@ export default new Vuex.Store({
     cities: citiesModule,
     players: playersModule
   },
-  strict: true
+  strict: false
 })

@@ -56,13 +56,13 @@
           <h4 class="mt-1 mb-50 center boldest">Acting: {{ actingPlayer.name }} (<span :class="colorMap(actingPlayer.color)">{{ actingPlayer.color }}</span>)</h4>
           <div>
             <button @click="askNextPlayer()">Stay</button>
-            <button @click="jump()">Jump</button>
+            <button @click="jump(actingPlayer)">Jump</button>
           </div>
         </div>
         <div class="mt-1" v-if="result">
           <div v-if="result === 'success'">
             <h4 class="mt-1 mb-50 center boldest">You made it!</h4>
-            <button @click="nextCity()">Next City</button>
+            <button @click="getNextCity()">Next City</button>
           </div>
           <div v-if="result === 'crash'">
             <h4 class="mt-1 mb-50 center boldest">Crashed!</h4>
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('players', {createPlayer: 'create', updatePlayerHand: 'updatePlayerHand', givePlayerPoints: 'givePlayerPoints'}),
+    ...mapActions('players', {createPlayer: 'create', updatePlayerHand: 'updatePlayerHand', discardPlayerCards: 'discardPlayerCards', givePlayerPoints: 'givePlayerPoints'}),
     ...mapActions('cities', ['takeCard']),
     ...mapActions('cards', ['updateCards']),
     getCardsLeftInCity(city) {
@@ -146,6 +146,38 @@ export default {
           players: this.players.filter(p => p.id !== captain.id)
         }
       }
+    },
+    getNextCity() {
+      this.result = ''
+
+      const newCaptain = this.getNextCaptain()
+      if (newCaptain.id === this.game.captain.id) {
+        // Give option to get off
+      }
+
+      const nextCity = this.nextCity(this.game.ship.nextCity.id)
+      if (!nextCity) {
+        this.game.ship.city = this.game.ship.nextCity
+        this.game.ship.players.forEach(p => {
+          this.jump(p)
+        })
+        this.jump(this.game.captain)
+        this.reset()
+        return
+      }
+
+      let players = this.game.ship.players
+      players.push(this.game.captain)
+
+      const updatedShip = {
+        city: this.game.ship.nextCity,
+        nextCity: nextCity,
+        players: players.filter(p => p.id !== newCaptain.id)
+      }
+
+      this.$set(this.game, 'dice', [])
+      this.$set(this.game, 'captain', newCaptain)
+      this.$set(this.game, 'ship', updatedShip)
     },
     getNextCaptain() {
       if (!this.game.captain) {
@@ -200,12 +232,12 @@ export default {
         }
       }
     },
-    async jump() {
+    async jump(player) {
       const random = Math.floor(Math.random() * this.game.ship.city.rewards.length)
       const rewardPoints = await this.takeCard({city: this.game.ship.city, index: random})
-      this.givePlayerPoints({player: this.actingPlayer, points: rewardPoints})
+      this.givePlayerPoints({player: player, points: rewardPoints})
 
-      let index = this.game.ship.players.findIndex(p => p.id === this.actingPlayer.id)
+      let index = this.game.ship.players.findIndex(p => p.id === player.id)
       this.game.ship.players.splice(index, 1)
       this.askNextPlayer(index - 1)
     },
@@ -228,6 +260,7 @@ export default {
         }
       }
       // success
+      this.discardPlayerCards({player: this.game.captain, dice: diceCount})
       return true
     },
     dealCards(num) {
